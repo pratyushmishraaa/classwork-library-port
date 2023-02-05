@@ -1,25 +1,51 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useEffect, useState } from 'react'
+import './App.css'
+import { url } from './resource'
+import axios from 'axios'
+import Nav from './components/Nav'
+import List from './components/List/List'
+import Card from './components/List/Card/Card'
+
+//axios vs fetch
+//crud
+//create => post
+//read => get
+//update => put
+//delete => delete
+
+//syntax is easier
+//axios converts data directly into json
+//you can also cancel the request using axios
+//axios has a wider range of browser supports
+
+
 
 function App() {
+  const [books, setBooks] = useState([])
+
+  useEffect(() => {
+    getBooks()
+  }, [])
+
+  const getBooks = async () => {
+    try {
+      const data = await axios.get(url)
+      setBooks(data.data)
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className='app'>
+      <Nav />
+      <Card />
+      <div className='app_body'>
+        <List getBooks={getBooks} books={books} />
+      </div>
     </div>
-  );
+  )
 }
 
-export default App;
+export default App
